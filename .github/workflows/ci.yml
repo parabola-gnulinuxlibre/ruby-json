@@ -29,7 +29,22 @@ jobs:
         - { os: ubuntu-latest  , ruby: jruby-9.2 } # Ruby 2.5
         - { os: ubuntu-latest  , ruby: jruby-9.3 } # Ruby 2.6
         - { os: ubuntu-latest  , ruby: jruby-9.4 } # Ruby 3.1
-        - { os: ubuntu-latest  , ruby: truffleruby }
+        #- { os: ubuntu-20.04   , ruby: truffleruby-19.3, bundler: '2.1' } # Ruby 2.6 # Fails installing bigdecimal
+        #- { os: ubuntu-20.04   , ruby: truffleruby-20.0, bundler: '2.1' } # Ruby 2.6 # Fails installing bigdecimal
+        - { os: ubuntu-20.04   , ruby: truffleruby-20.1, bundler: '2.3' } # Ruby 2.6
+        - { os: ubuntu-20.04   , ruby: truffleruby-20.2, bundler: '2.3' } # Ruby 2.6
+        - { os: ubuntu-20.04   , ruby: truffleruby-20.3, bundler: '2.3' } # Ruby 2.6
+        - { os: ubuntu-20.04   , ruby: truffleruby-21.0, bundler: '2.3' } # Ruby 2.7
+        - { os: ubuntu-20.04   , ruby: truffleruby-21.1, bundler: '2.3' } # Ruby 2.7
+        - { os: ubuntu-20.04   , ruby: truffleruby-21.2, bundler: '2.3' } # Ruby 2.7
+        - { os: ubuntu-20.04   , ruby: truffleruby-21.3, bundler: '2.3' } # Ruby 2.7
+        - { os: ubuntu-20.04   , ruby: truffleruby-22.0 } # Ruby 3.0
+        - { os: ubuntu-20.04   , ruby: truffleruby-22.1 } # Ruby 3.0
+        - { os: ubuntu-20.04   , ruby: truffleruby-22.2 } # Ruby 3.0
+        - { os: ubuntu-20.04   , ruby: truffleruby-22.3 } # Ruby 3.0
+        - { os: ubuntu-20.04   , ruby: truffleruby-23.0 } # Ruby 3.1
+        - { os: ubuntu-20.04   , ruby: truffleruby-23.1 } # Ruby 3.2
+        - { os: ubuntu-20.04   , ruby: truffleruby-24.0 } # Ruby 3.2
 
     steps:
       - uses: actions/checkout@v2
@@ -38,6 +53,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
+          bundler: ${{ matrix.bundler }}
 
       - run: sudo apt install ragel
         if: ${{ startsWith(matrix.os, 'ubuntu') }}
