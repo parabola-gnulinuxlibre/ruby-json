@@ -48,17 +48,17 @@ EOT
 branch() {
 	local branch="${1?}"
 	local branch_enc="${branch//'/'/'%2F'}"
-	echo "[\`${branch}\`](https://github.com/parabola-gnulinuxlibre/ruby-json/tree/${branch}) ![CI status](https://github.com/parabola-gnulinuxlibre/ruby-json/actions/workflows/ci.yml/badge.svg?branch=${branch_enc})"
+	echo "[\`${branch}\` ![CI status](https://github.com/parabola-gnulinuxlibre/ruby-json/actions/workflows/ci.yml/badge.svg?branch=${branch_enc})](https://github.com/parabola-gnulinuxlibre/ruby-json/tree/${branch})"
 }
 cat <<EOT
 
 # Branches
 
-| JSON base version | status                    | vanilla LTS branch           | liberated branch               |
-|-------------------|---------------------------|------------------------------|--------------------------------|
-| JSON 2.3.0        | active<br/>(for Ruby 2.7) | $(branch lts/v2.3.0/vanilla) | $(branch lts/v2.3.0/no-cvtutf) |
-| JSON 2.6.3        | active<br/>(for Ruby 3.2) | $(branch lts/v2.6.3/vanilla) | $(branch lts/v2.6.3/no-cvtutf) |
-| JSON \`master\`   | active<br/>(for PR)       | -                            | $(branch lukeshu/no-cvtutf)    |
+| JSON base version | status                | vanilla LTS branch           | liberated branch               |
+|-------------------|-----------------------|------------------------------|--------------------------------|
+| JSON 2.3.0        | active (for Ruby 2.7) | $(branch lts/v2.3.0/vanilla) | $(branch lts/v2.3.0/no-cvtutf) |
+| JSON 2.6.3        | active (for Ruby 3.2) | $(branch lts/v2.6.3/vanilla) | $(branch lts/v2.6.3/no-cvtutf) |
+| JSON \`master\`   | active (for PR)       | -                            | $(branch lukeshu/no-cvtutf)    |
 EOT
 
 cat <<EOT
@@ -84,7 +84,7 @@ git tag | xargs -n1 git log -n1 --date=short --format='%cd %H' | sort -u | while
 	if [[ -n "$json_tag" ]]; then
 		echo -n " Git tag: [\`${json_tag}\`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/${json_tag})"
 		echo -n '<br/>'
-		echo -n " tarball: [<small>\`${commit}.tar.gz\`</small>](https://github.com/parabola-gnulinuxlibre/ruby-json/archive/${commit}.tar.gz)"
+		echo -n " tarball: [\`${commit::7}….tar.gz\`](https://github.com/parabola-gnulinuxlibre/ruby-json/archive/${commit}.tar.gz)"
 	fi
 
 	echo ' |'
