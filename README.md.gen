@@ -60,3 +60,30 @@ cat <<EOT
 | JSON 2.6.3        | active (for Ruby 3.2) | $(branch lts/v2.6.3/vanilla) | $(branch lts/v2.6.3/no-cvtutf) |
 | JSON \`master\`   | active (for PR)       | -                            | $(branch lukeshu/no-cvtutf)    |
 EOT
+
+cat <<EOT
+
+# Releases
+
+| Commit | Ruby (vendored) | JSON (standalone) |
+|--------|-----------------|-------------------|
+EOT
+git tag | xargs -n1 git log -n1 --date=short --format='%cd %H' | sort -u | while read -r date commit; do
+	echo -n "| [${commit::7} (${date})](https://github.com/parabola-gnulinuxlibre/ruby-json/commits/${commit})"
+
+	ruby_tag="$(git describe --tags --exact --match='ruby*' "$commit" 2>/dev/null || true)"
+	echo -n " |"
+	if [[ -n "$ruby_tag" ]]; then
+		echo -n " [Git tag: ${ruby_tag}](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/${ruby_tag})"
+		echo -n " [tarball: ${ruby_tag}.tar.gz](https://repo.parabola.nu/other/ruby-libre/${ruby_tag}.tar.gz)"
+	fi
+
+	json_tag="$(git describe --tags --exact --match='v*' "$commit" 2>/dev/null || true)"
+	echo -n " |"
+	if [[ -n "$json_tag" ]]; then
+		echo -n " [Git tag: ${json_tag}](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/${json_tag})"
+		echo -n " [tarball: ${commit}.tar.gz](https://github.com/parabola-gnulinuxlibre/ruby-json/archive/${commit}.tar.gz)"
+	fi
+
+	echo " |"
+done
