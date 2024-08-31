@@ -43,7 +43,29 @@ static void convert_UTF8_to_JSON(FBuffer *out_buffer, VALUE in_string, bool out_
     unsigned long in_utf8_len = RSTRING_LEN(in_string);
     bool in_is_ascii_only = rb_enc_str_asciionly_p(in_string);
 
-    unsigned long beg = 0, pos;
+    unsigned long pos, out_len = 0, beg = 0;
+
+    /* JSON policy */
+#define should_escape(ch) (                        \
+            (ch < 0x20) ||                         \
+            (ch == '"') ||                         \
+            (ch == '\\') ||                        \
+            (out_ascii_only && (ch > 0x7F)) ||     \
+            (out_script_safe && (ch == '/')) ||    \
+            (out_script_safe && (ch == 0x2028)) || \
+            (out_script_safe && (ch == 0x2029)) )
+
+    /* We do the ~same loop twice:
+     *
+     *  - first to figure the length of the output string, so that we
+     *    can pre-allocate space in the output buffer with
+     *    fbuffer_inc_capa().
+     *
+     *  - second do actually insert into the output buffer.
+     *
+     * I hate the duplication, but the benchmarks show that this is
+     * worth it for keeping stddev down.
+     */
 
     for (pos =  0; pos < in_utf8_len;) {
         uint32_t ch;
@@ -77,18 +99,56 @@ static void convert_UTF8_to_JSON(FBuffer *out_buffer, VALUE in_string, bool out_
                          "source sequence is illegal/malformed utf-8");
         }
 
-        /* JSON policy */
-        should_escape =
-            (ch < 0x20) ||
-            (ch == '"') ||
-            (ch == '\\') ||
-            (out_ascii_only && (ch > 0x7F)) ||
-            (out_script_safe && (ch == '/')) ||
-            (out_script_safe && (ch == 0x2028)) ||
-            (out_script_safe && (ch == 0x2029));
+        /* JSON encoding */
+        if (should_escape(ch)) {
+            switch (ch) {
+                case '"':
+                case '\\':
+                case '/':
+                case '\b':
+                case '\f':
+                case '\n':
+                case '\r':
+                case '\t':
+                    out_len += 2;
+                    break;
+                default:
+                    if (ch <= 0xFFFF)
+                        out_len += 6;
+                    else
+                        out_len += 12;
+            }
+        } else
+            out_len += 1;
+
+        pos += ch_len;
+    }
+
+    fbuffer_inc_capa(out_buffer, out_len);
+
+    for (pos = 0; pos < in_utf8_len;) {
+        uint32_t ch;
+        unsigned long ch_len;
+        bool should_escape;
+
+        /* UTF-8 decoding */
+        if (in_is_ascii_only) {
+            ch = in_utf8_str[pos];
+            ch_len = 1;
+        } else {
+            /* We get to be a little lighter this time through the
+             * loop and skip the validation. */
+            short i;
+            if      ((in_utf8_str[pos] & 0x80) == 0x00) { ch_len = 1; ch = in_utf8_str[pos];        } /* leading 1 bit is   0b0     */
+            else if ((in_utf8_str[pos] & 0xE0) == 0xC0) { ch_len = 2; ch = in_utf8_str[pos] & 0x1F; } /* leading 3 bits are 0b110   */
+            else if ((in_utf8_str[pos] & 0xF0) == 0xE0) { ch_len = 3; ch = in_utf8_str[pos] & 0x0F; } /* leading 4 bits are 0b1110  */
+            else                                        { ch_len = 4; ch = in_utf8_str[pos] & 0x07; } /* leading 5 bits are 0b11110 */
+            for (i = 1; i < ch_len; i++)
+                ch = (ch<<6) | (in_utf8_str[pos+i] & 0x3F);
+        }
 
         /* JSON encoding */
-        if (should_escape) {
+        if (should_escape(ch)) {
             if (pos > beg)
                 fbuffer_append(out_buffer, &in_utf8_str[beg], pos - beg);
             beg = pos + ch_len;
