@@ -58,6 +58,7 @@ cat <<EOT
 |-------------------|-----------------------|------------------------------|--------------------------------|
 | JSON 2.3.0        | active (for Ruby 2.7) | $(branch lts/v2.3.0/vanilla) | $(branch lts/v2.3.0/no-cvtutf) |
 | JSON 2.6.3        | active (for Ruby 3.2) | $(branch lts/v2.6.3/vanilla) | $(branch lts/v2.6.3/no-cvtutf) |
+| JSON 2.7.1        | inactive              | $(branch lts/v2.7.1/vanilla) | $(branch lts/v2.7.1/no-cvtutf) |
 | JSON \`master\`   | active (for PR)       | -                            | $(branch lukeshu/no-cvtutf)    |
 EOT
 
