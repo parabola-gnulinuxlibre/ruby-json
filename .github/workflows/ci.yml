@@ -25,7 +25,7 @@ jobs:
         - 2.4
         - 2.3
         include:
-        - { os: ubuntu-latest  , ruby: jruby-9.1 } # Ruby 2.3
+        #- { os: ubuntu-latest  , ruby: jruby-9.1 } # Ruby 2.3 # Fails installing bigdecimal
         - { os: ubuntu-latest  , ruby: jruby-9.2 } # Ruby 2.5
         - { os: ubuntu-latest  , ruby: jruby-9.3 } # Ruby 2.6
         - { os: ubuntu-latest  , ruby: jruby-9.4 } # Ruby 3.1
