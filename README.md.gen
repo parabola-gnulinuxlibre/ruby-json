@@ -66,13 +66,20 @@ cat <<EOT
 
 # Releases
 
-| Commit | Ruby (vendored) | JSON (standalone) |
-|--------|-----------------|-------------------|
+| Date | Version | Ruby (vendored) | JSON (standalone) |
+|------|---------|-----------------|-------------------|
 EOT
-git tag | xargs -n1 git log -n1 --date=short --format='%cd %H' | sort -u | while read -r date commit; do
-	echo -n "| [\`${commit::7}\` (${date})](https://github.com/parabola-gnulinuxlibre/ruby-json/commits/${commit})"
-
+git fetch origin --tags
+git fetch --no-tags https://github.com/flori/json 'refs/tags/v*:refs/tags/upstream/v*'
+git tag | grep -e ^v -e ^ruby | xargs -n1 git log -n1 --date=short --format='%cd %H' | sort -u | while read -r date commit; do
 	ruby_tag="$(git describe --tags --exact --match='ruby*' "$commit" 2>/dev/null || true)"
+	json_tag="$(git describe --tags --exact --match='v*' "$commit" 2>/dev/null || true)"
+	name="${json_tag:-$(git describe --tags --match='upstream/v*' "$commit"|sed 's,upstream/,,')}"
+
+	echo -n "| ${date}"
+
+	echo -n " | [\`${name}\`](https://github.com/parabola-gnulinuxlibre/ruby-json/commits/${commit})"
+
 	echo -n ' |'
 	if [[ -n "$ruby_tag" ]]; then
 		echo -n " Git tag: [\`${ruby_tag}\`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/${ruby_tag})"
@@ -80,13 +87,12 @@ git tag | xargs -n1 git log -n1 --date=short --format='%cd %H' | sort -u | while
 		echo -n " tarball: [\`${ruby_tag}.tar.gz\`](https://repo.parabola.nu/other/ruby-libre/${ruby_tag}.tar.gz)"
 	fi
 
-	json_tag="$(git describe --tags --exact --match='v*' "$commit" 2>/dev/null || true)"
 	echo -n ' |'
 	if [[ -n "$json_tag" ]]; then
 		echo -n " Git tag: [\`${json_tag}\`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/${json_tag})"
 		echo -n '<br/>'
-		echo -n " tarball: [\`${commit::7}….tar.gz\`](https://github.com/parabola-gnulinuxlibre/ruby-json/archive/${commit}.tar.gz)"
 	fi
+	echo -n " tarball: [\`${commit::7}….tar.gz\`](https://github.com/parabola-gnulinuxlibre/ruby-json/archive/${commit}.tar.gz)"
 
 	echo ' |'
 done

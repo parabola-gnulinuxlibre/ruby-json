@@ -52,7 +52,7 @@ Ruby versions.
 
 # Releases
 
-| Commit | Ruby (vendored) | JSON (standalone) |
-|--------|-----------------|-------------------|
-| [`6e75be6` (2024-02-22)](https://github.com/parabola-gnulinuxlibre/ruby-json/commits/6e75be64c896e093075ec99bf94a3f5fc576c283) | Git tag: [`ruby-3.0.6-libre1`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/ruby-3.0.6-libre1)<br/> tarball: [`ruby-3.0.6-libre1.tar.gz`](https://repo.parabola.nu/other/ruby-libre/ruby-3.0.6-libre1.tar.gz) | Git tag: [`v2.7.1-1.parabola1`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/v2.7.1-1.parabola1)<br/> tarball: [`6e75be6….tar.gz`](https://github.com/parabola-gnulinuxlibre/ruby-json/archive/6e75be64c896e093075ec99bf94a3f5fc576c283.tar.gz) |
-| [`b67679c` (2024-05-15)](https://github.com/parabola-gnulinuxlibre/ruby-json/commits/b67679c13bca877e20b7fcd47fb1365f5cc01eb5) | Git tag: [`ruby-2.7.8-libre1`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/ruby-2.7.8-libre1)<br/> tarball: [`ruby-2.7.8-libre1.tar.gz`](https://repo.parabola.nu/other/ruby-libre/ruby-2.7.8-libre1.tar.gz) | |
+| Date | Version | Ruby (vendored) | JSON (standalone) |
+|------|---------|-----------------|-------------------|
+| 2024-02-22 | [`v2.7.1-1.parabola1`](https://github.com/parabola-gnulinuxlibre/ruby-json/commits/6e75be64c896e093075ec99bf94a3f5fc576c283) | Git tag: [`ruby-3.0.6-libre1`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/ruby-3.0.6-libre1)<br/> tarball: [`ruby-3.0.6-libre1.tar.gz`](https://repo.parabola.nu/other/ruby-libre/ruby-3.0.6-libre1.tar.gz) | Git tag: [`v2.7.1-1.parabola1`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/v2.7.1-1.parabola1)<br/> tarball: [`6e75be6….tar.gz`](https://github.com/parabola-gnulinuxlibre/ruby-json/archive/6e75be64c896e093075ec99bf94a3f5fc576c283.tar.gz) |
+| 2024-05-15 | [`v2.3.0-20-gb67679c`](https://github.com/parabola-gnulinuxlibre/ruby-json/commits/b67679c13bca877e20b7fcd47fb1365f5cc01eb5) | Git tag: [`ruby-2.7.8-libre1`](https://github.com/parabola-gnulinuxlibre/ruby-json/releases/tag/ruby-2.7.8-libre1)<br/> tarball: [`ruby-2.7.8-libre1.tar.gz`](https://repo.parabola.nu/other/ruby-libre/ruby-2.7.8-libre1.tar.gz) | tarball: [`b67679c….tar.gz`](https://github.com/parabola-gnulinuxlibre/ruby-json/archive/b67679c13bca877e20b7fcd47fb1365f5cc01eb5.tar.gz) |
